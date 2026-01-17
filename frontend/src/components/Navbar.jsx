@@ -2,6 +2,7 @@ import { Link, NavLink, useNavigate } from "react-router-dom"
 import {assets} from "../assets/assets"
 import axios from "../api/axios"
 import { useEffect,useState } from "react"
+import { useLocation } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 const Navbar = () => {
@@ -9,21 +10,26 @@ const Navbar = () => {
   const [isAdmin, setisAdmin] = useState()
   const [products, setproducts] = useState([])
   const [menuOpen, setMenuOpen] = useState(false);
+  const location = useLocation();
   useEffect(() => {
-    const loginCheck = async () => {
-      try {
-        const res=await axios.get("/auth/me", { withCredentials: true })
-        setloggedIn(true)
-        setisAdmin(res.data.user.role==='admin')
-      } catch (error) {
-        if (error.response?.status === 401) {
-        setloggedIn(false);
-        setisAdmin(false);
-        } 
-      }
+  const loginCheck = async () => {
+    try {
+      const res = await axios.get("/auth/me", {
+        withCredentials: true,
+      });
+      setloggedIn(true);
+      setisAdmin(res.data.user.role === "admin");
+    } catch (error) {
+      setloggedIn(false);
+      setisAdmin(false);
+      console.log(error);
+      
     }
-    loginCheck()
-  })
+  };
+
+  loginCheck();
+}, [location.pathname]);
+
   useEffect(() => {
       if (!loggedIn) return; // Only fetch if logged in
       const fetchProducts = async () => {
@@ -38,7 +44,7 @@ const Navbar = () => {
         }
       };
       fetchProducts();
-    })
+    },[loggedIn])
   const navigate=useNavigate()
   const logoutHandler=async(e)=>{
     e.preventDefault()
@@ -157,7 +163,6 @@ const Navbar = () => {
       )}
     </>
   );
-
 }
 
 export default Navbar

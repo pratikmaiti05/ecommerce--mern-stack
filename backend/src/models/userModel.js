@@ -15,6 +15,7 @@ const userSchema=new mongoose.Schema({
       ref: "product",
       required: true,
     },
+    size:String,
     quantity: {
       type: Number,
       default: 1,

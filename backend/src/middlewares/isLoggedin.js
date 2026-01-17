@@ -8,7 +8,6 @@ async function isLoggedin(req,res,next) {
     const decoded = jwt.verify(token, process.env.JWTSECRET_KEY);
     const user = await userModel.findById(decoded.id);
     if (!user) return res.status(401).json({ message: 'User not found' });
-
     req.user = user;
     next();
   } catch (err) {

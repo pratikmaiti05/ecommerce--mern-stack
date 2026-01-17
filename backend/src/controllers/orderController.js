@@ -3,46 +3,37 @@ const orderModel = require('../models/orderModel');
 const Product = require('../models/productModel');
 exports.placeOrder = async (req, res) => {
   try {
-    const { shippingInfo, cart, paymentMethod, total } = req.body;
-    const userId = req.user._id;
-    const productIds = cart.map(item => item.product?._id || item._id || item.product);    
-    const products = await Product.find({ _id: { $in: productIds } });
-    const items = cart.map(item => {
-      let prodId = item.product?._id || item._id || item.product;
-      let prod = products.find(p => p._id.toString() === prodId?.toString());
-      return {
-        product: prod ? prod._id : undefined,
-        name: prod ? prod.name : item.name,
-        price: prod ? prod.price : item.price,
-        quantity: item.quantity || 1
-      };
-    });
-    const validItems = items.filter(i => i.product);
-    if (validItems.length === 0) {
-      return res.status(400).json({ message: "No valid products found in cart" });
+    const user = req.user;
+
+    if (!user.cart.length) {
+      return res.status(400).json({ message: "Cart is empty" });
     }
+
     const order = await orderModel.create({
-      user: userId,
-      items: validItems,
-      shippingInfo,
-      paymentMethod,
-      total
+      user: user._id,
+      items: user.cart.map(item => ({
+        product: item.product,
+        size: item.size,
+        quantity: item.quantity
+      })),
+      total: req.body.total,
+      shippingInfo: req.body.shippingInfo,
+      status: "Pending"
     });
-    await publishToQueue('ORDER-PLACED',{
-      id:order._id,
-      username:req.user.username,
-      email:req.user.email,
-      status:order.status,
-      paymentMethod:order.paymentMethod,
-      total:order.total,
-      shippingInfo:order.shippingInfo
-    })
-    res.status(201).json({ message: "Order placed successfully", order });
-  } catch (err) {
-    console.log("Order placement error:", err);
-    res.status(500).json({ message: "Order placement failed" });
+
+    user.cart = [];
+    await user.save();
+
+    res.status(201).json({
+      message: "Order placed successfully",
+      order
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Order failed" });
   }
 };
+
 exports.getUserOrders = async (req, res) => {
   try {
     const userId = req.user._id;

@@ -11,11 +11,13 @@ router.post('/addProduct',upload.single('image'),isLoggedin,isAdmin,async (req,r
   try {
     const image = await uploadFile(req.file);
     let{name,price,category,subCategory,description,size}=req.body
+    size=JSON.parse(size)
     const products=await productModel.create({
       image:image.url,
-      name,price,category,subCategory,description,size:size[0]
+      name,price,category,subCategory,description,size:size
     })
-    await publishToQueue('PRODUCT_CREATED',{
+    await publishToQueue('PRODUCT_CREATED',
+      {
       id:products._id,
       name:products.name,
       description:products.description,

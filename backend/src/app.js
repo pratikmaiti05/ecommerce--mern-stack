@@ -1,10 +1,5 @@
 const express=require('express');
 const app=express()
-const {connect}=require('./broker/broker');
-const setListeners=require('./broker/listners');
-connect().then(()=>{
-  setListeners();
-})
 const cookieParser=require('cookie-parser')
 const userRoute=require('./routes/userRoute')
 const productRoute=require('./routes/productRoute')

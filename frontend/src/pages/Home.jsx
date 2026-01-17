@@ -17,21 +17,19 @@ const Home = () => {
       
       try {
         const res = await axios.get("/products/getProducts");
-        const products = res.data;
-        setproducts(products);
-        setlatestProducts(products.slice(0, 6));
+        const product = res.data;
+        setproducts(product);
+        setlatestProducts(product.slice(0, 6));
       } catch (error) {
         console.error("Error fetching products:", error);
       }
     };
     fetchProducts();
-  });
- 
-
-  const renderProducts = latestProducts.map((product, idx) => {
+  },[]);
+  const renderProducts = latestProducts.map((product) => {
     return (
       <div
-        key={idx}
+        key={product._id}
         className="w-[45%] sm:w-[30%] md:w-[20%] flex flex-col justify-center items-center gap-2 p-2 rounded-xl hover:scale-105 transition-transform duration-300 ease-in-out"
       >
         <Link to={`/product/${product._id}`} className="w-full">

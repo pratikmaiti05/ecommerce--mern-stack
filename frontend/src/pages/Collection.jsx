@@ -1,9 +1,7 @@
-import { useContext,useEffect,useState } from "react"
-import { ShopContext } from "../context/ShopContext"
+import { useEffect,useMemo,useState } from "react"
 import Footer from "../components/Footer";
 import { Link } from "react-router-dom"
-import axios from "../api/axios"
-
+import axios, { loadProducts } from "../api/axios"
 const Collection = () => {
   const [products, setproducts] = useState([])
   const [filterProducts, setfilterProducts] = useState([])
@@ -14,7 +12,7 @@ const Collection = () => {
   useEffect(()=>{
     const fetchProducts = async () => {
       try {
-        const res=await axios.get('/products/getProducts')
+        const res=await loadProducts()
         const products = res.data;
         setproducts(products)
         setfilterProducts(products)
@@ -43,7 +41,7 @@ const Collection = () => {
     }
   }
 
-  const applyFilter=async (e)=>{
+  const applyFilter=async ()=>{
     if(!products.length)  return;
     let productCopy=products.slice();
     if (category.length>0) {
@@ -67,23 +65,27 @@ const Collection = () => {
     applyFilter()
   },[category,subCategory,search])
 
-  const renderProducts=filterProducts.map((product,idx)=>{
-    return (
-      <div 
-        key={idx} 
-        className="h-[35vh] sm:h-[40vh] w-[80vw] sm:w-[45vw] md:w-[22vw] lg:w-[15vw] flex flex-col hover:scale-105 transition ease-in-out"
-      >
-        <Link to={`/product/${product._id}`}>
-          <img 
-            src={product.image} 
-            className="h-[25vh] sm:h-[30vh] md:h-[35vh] w-full object-contain rounded-lg"
-          />
-        </Link>
-        <h1 className="font-thin text-sm sm:text-base">{product.name}</h1>
-        <span className="font-thin text-sm sm:text-base">{product.price}$</span>
-      </div>
-    )
-  })
+  const renderProducts=useMemo(()=>{
+    return filterProducts.map((product)=>{
+      return (
+        <div 
+          key={product._id} 
+          className="h-[35vh] sm:h-[40vh] w-[80vw] sm:w-[45vw] md:w-[22vw] lg:w-[15vw] flex flex-col hover:scale-105 transition ease-in-out"
+        >
+          <Link to={`/product/${product._id}`}>
+            <img 
+              src={product.image}
+              alt={product.name}
+              loading="lazy"
+              className="h-[25vh] sm:h-[30vh] md:h-[35vh] w-full object-contain rounded-lg"
+            />
+          </Link>
+          <h1 className="font-thin text-sm sm:text-base">{product.name}</h1>
+          <span className="font-thin text-sm sm:text-base">{product.price}$</span>
+        </div>
+      )
+    })
+  },[filterProducts])
 
   return (
     <div className="w-full min-h-screen flex flex-col py-5 px-4 md:px-10 gap-10">
