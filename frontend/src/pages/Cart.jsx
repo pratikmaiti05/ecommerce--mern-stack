@@ -45,9 +45,9 @@ const Cart = () => {
         Your cart is empty.
       </p>
     ) : (
-      products.map((item, idx) => (
+      products.map((item) => (
         <div
-          key={idx}
+          key={item.product._id}
           className="flex flex-col sm:flex-row items-center sm:items-start justify-between gap-5 border p-4 rounded-xl shadow-sm"
         >
           {/* Product Info */}
@@ -62,7 +62,7 @@ const Cart = () => {
                 {item.product?.name}
               </h2>
               <p className="text-gray-500 text-sm">
-                {item.product?.category} - {item.product?.size}
+                {item.product?.category}
               </p>
               <p className="text-gray-700 font-medium">
                 ${item.product?.price - (item.product?.discount || 0)}

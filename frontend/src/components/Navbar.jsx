@@ -44,7 +44,7 @@ const Navbar = () => {
         }
       };
       fetchProducts();
-    },[loggedIn])
+    },[loggedIn]);
   const navigate=useNavigate()
   const logoutHandler=async(e)=>{
     e.preventDefault()
@@ -117,11 +117,7 @@ const Navbar = () => {
           {loggedIn && (
             <Link to="/cart" className="relative hidden md:block">
               <img src={assets.cart_icon} alt="cart" className="w-6 cursor-pointer" />
-              {products.length > 0 && (
-                <span className="absolute -right-2 -bottom-2 bg-black text-white text-[10px] font-medium w-5 h-5 flex items-center justify-center rounded-full">
-                  {products.length}
-                </span>
-              )}
+              
             </Link>
           )}
 
