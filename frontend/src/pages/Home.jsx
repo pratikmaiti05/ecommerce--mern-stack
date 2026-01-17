@@ -9,23 +9,16 @@ import { Link } from "react-router-dom";
 import axios from "../api/axios";
 
 const Home = () => {
-  const [products, setproducts] = useState([]);
   const [latestProducts, setlatestProducts] = useState([]);
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      
-      try {
-        const res = await axios.get("/products/getProducts");
-        const product = res.data;
-        setproducts(product);
-        setlatestProducts(product.slice(0, 6));
-      } catch (error) {
-        console.error("Error fetching products:", error);
-      }
-    };
-    fetchProducts();
-  },[]);
+useEffect(() => {
+  const fetchProducts = async () => {
+    const res = await axios.get("/products/getProducts");
+    setlatestProducts(res.data.slice(0, 6));
+  };
+  fetchProducts();
+}, []);
+
   const renderProducts = latestProducts.map((product) => {
     return (
       <div
