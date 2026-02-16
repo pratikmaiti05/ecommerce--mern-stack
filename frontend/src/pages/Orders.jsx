@@ -48,7 +48,7 @@ const Orders = () => {
                 <p>
                   <span className="font-medium">Items:</span>{" "}
                   {order.items && order.items.length > 0 ? (
-                    order.items.map((i, idx) =>
+                    order.items.map((i) =>
                       i.product && i.product.name ? i.product.name : (i.name || "Product deleted")
                     ).join(", ")
                   ) : (

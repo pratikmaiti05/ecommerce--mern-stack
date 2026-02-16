@@ -24,6 +24,7 @@ const Checkout = () => {
       const res = await axios.get("/auth/cart-Items");
       setCart(res.data.user.cart || []);
     } catch (error) {
+      console.log(error);
       toast.error("Failed to fetch cart items");
     }
   };
@@ -60,6 +61,7 @@ const Checkout = () => {
         navigate(`/order-success/${res.data.order._id}`);
       }, 1500);
     } catch (err) {
+      console.log(err);
       toast.error("Order failed!");
     } finally {
       setLoading(false);

@@ -101,14 +101,9 @@ async function toCart(req, res) {
     } else {
       user.cart.push({ product: new mongoose.Types.ObjectId(productId), quantity: 1 });
     }
-
-    // Remove any cart items with missing/undefined product before saving
     user.cart = user.cart.filter(item => item.product);
-
     await user.save();
-
     const populatedUser = await user.populate("cart.product");
-
     res.json({
       message: "Product Added",
       cart: populatedUser.cart,
@@ -144,6 +139,32 @@ async function removeFromCart(req,res) {
     res.status(500).json({ message: "Server error", error: error.message });
   }
 }
+async function increaseItem(req,res) {
+  try {
+    const user=await userModel.findOne({email:req.user.email})
+    const productId=req.params.id
+    if (!mongoose.Types.ObjectId.isValid(productId)) {
+      return res.status(400).json({ message: "Invalid product ID" });
+    }
+    const existingItem=user.cart.find(
+      (item)=>item.product.toString()===productId
+    )
+    console.log(existingItem);
+    if(!existingItem){
+      return res.status(404).json({ message: "Item not found in cart" })
+    }
+    else{
+      existingItem.quantity+=1
+    }
+    await user.save()
+    res.status(200).json({
+      message: "Quantity increased",
+    })
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+}
 async function cartItems(req,res) {
   const user=await userModel.findOne({email:req.user.email}).populate("cart.product")
   res.json({
@@ -159,5 +180,6 @@ module.exports={
   logoutHandler,
   toCart,
   cartItems,
-  removeFromCart
+  removeFromCart,
+  increaseItem
 }

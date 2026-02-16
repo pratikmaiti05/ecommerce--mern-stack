@@ -1,5 +1,5 @@
 const express=require('express')
-const { registerHandler, loginHandler, logoutHandler, toCart, cartItems, removeFromCart } = require('../controllers/userController')
+const { registerHandler, loginHandler, logoutHandler, toCart, cartItems, removeFromCart, increaseItem } = require('../controllers/userController')
 const { isLoggedin } = require('../middlewares/isLoggedin')
 const router=express.Router()
 router.post('/register',registerHandler)
@@ -18,5 +18,6 @@ router.get('/me', isLoggedin,(req, res) => {
 });
 router.post('/cart/:id',isLoggedin,toCart)
 router.post('/removeFrom-cart/:id',isLoggedin,removeFromCart)
+router.post('/increaseItem/:id',isLoggedin,increaseItem)
 router.get('/cart-Items',isLoggedin,cartItems)
 module.exports=router

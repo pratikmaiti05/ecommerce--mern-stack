@@ -95,6 +95,8 @@ const Product = () => {
               <img
                 src={items.image}
                 alt={items.name}
+                width="96"
+                height="96"
                 className="h-[40vh] sm:h-[50vh] lg:h-[55vh] w-full sm:w-[60%] lg:w-[25vw] object-contain"
               />
             </div>

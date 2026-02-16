@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect } from "react"
+import {  useState, useEffect } from "react"
 import { ShopContext } from "../context/ShopContext"
 import { Link } from "react-router-dom"
 import axios from "../api/axios"

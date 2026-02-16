@@ -10,6 +10,7 @@ const Navbar = () => {
   const [isAdmin, setisAdmin] = useState()
   const [products, setproducts] = useState([])
   const [menuOpen, setMenuOpen] = useState(false);
+  const [initials, setinitials] = useState()
   const location = useLocation();
   useEffect(() => {
   const loginCheck = async () => {
@@ -19,6 +20,7 @@ const Navbar = () => {
       });
       setloggedIn(true);
       setisAdmin(res.data.user.role === "admin");
+      setinitials(res.data.user.username.charAt(0).toUpperCase());
     } catch (error) {
       setloggedIn(false);
       setisAdmin(false);
@@ -31,7 +33,7 @@ const Navbar = () => {
 }, [location.pathname]);
 
   useEffect(() => {
-      if (!loggedIn) return; // Only fetch if logged in
+      if (!loggedIn) return;
       const fetchProducts = async () => {
         try {
           const res = await axios.get("/auth/cart-Items", { withCredentials: true });
@@ -112,15 +114,20 @@ const Navbar = () => {
               </ul>
             </div>
           </div>
-
           {/* Cart */}
           {loggedIn && (
+            <>
             <Link to="/cart" className="relative hidden md:block">
               <img src={assets.cart_icon} alt="cart" className="w-6 cursor-pointer" />
               
             </Link>
+            </>
           )}
-
+          {loggedIn &&
+          <div className="h-10 w-10 bg-amber-200 rounded-full text-black flex items-center justify-center font-bold">
+            {initials}
+          </div>
+          }
           {/* Hamburger for Mobile */}
           <div
             className="md:hidden flex flex-col gap-1 cursor-pointer"

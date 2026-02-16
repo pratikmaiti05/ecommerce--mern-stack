@@ -17,13 +17,18 @@ const Cart = () => {
   useEffect(() => {
     fetchProducts();
   }, []);
+  const addItemHandler=async(productId)=>{
+    await axios.post(`/auth/increaseItem/${productId}`);
+    toast.success("Product quantity increased in cart");
+    fetchProducts();
+  }
   const removeHandler = async (productId) => {
     await axios.post(`/auth/removeFrom-cart/${productId}`);
     toast.success("Product removed from cart");
     fetchProducts();
   };
   const subtotal = products.reduce(
-    (total, item) => total + ((item.product?.price || 0) - (item.product?.discount || 0)) * (item.quantity || 1),
+    (total, item) => total + (item.product?.price || 0) * (item.quantity || 1),
     0
   );
   const shipping = products.length > 0 ? 20 : 0;
@@ -55,6 +60,8 @@ const Cart = () => {
             <img
               src={item.product?.image || "https://via.placeholder.com/80"}
               alt={item.product?.name}
+              width="96"
+              height="96"
               className="w-20 h-20 sm:w-24 sm:h-24 object-cover rounded-lg"
             />
             <div>
@@ -78,12 +85,16 @@ const Cart = () => {
               readOnly
               className="w-16 border rounded-lg text-center p-1"
             />
-            <button
+            {/* <button
               className="text-red-500 font-medium hover:underline"
               onClick={() => removeHandler(item.product?._id)}
             >
               Remove
-            </button>
+            </button> */}
+            <div className="flex flex-col justify-center items-center gap-2">
+              <i className="fa-solid fa-plus cursor-pointer" onClick={() => addItemHandler(item.product?._id)}></i>
+              <i className="fa-solid fa-minus cursor-pointer" onClick={() => removeHandler(item.product?._id)}></i>
+            </div>
           </div>
         </div>
       ))
