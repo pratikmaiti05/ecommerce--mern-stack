@@ -24,8 +24,7 @@ const Navbar = () => {
     } catch (error) {
       setloggedIn(false);
       setisAdmin(false);
-      console.log(error);
-      
+      console.log(error); 
     }
   };
 

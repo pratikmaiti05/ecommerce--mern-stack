@@ -64,7 +64,8 @@ const AdminProducts = () => {
       formData.append("description", description);
       formData.append("category", category);
       formData.append("subCategory", subcategory);
-      formData.append("price", price);
+      formData.append("price[amount]", price);
+      formData.append("price[currency]", "INR");
       formData.append("size", JSON.stringify(sizes));
       formData.append("image", image);
 
@@ -162,7 +163,7 @@ const AdminProducts = () => {
             <input
               type="number"
               min="0"
-              placeholder="Price"
+              placeholder="Enter Amount"
               value={price}
               onChange={(e) => setPrice(e.target.value)}
               className="w-full border border-gray-300 rounded-md px-4 py-2"
@@ -222,7 +223,7 @@ const AdminProducts = () => {
                   />
                   <div className="flex-1">
                     <h2 className="font-medium">{p.name}</h2>
-                    <p className="text-sm text-gray-600">${p.price}</p>
+                    <p className="text-sm text-gray-600">${p.price.amount/100}</p>
                   </div>
                   <button
                     onClick={() => handleRemove(p._id)}

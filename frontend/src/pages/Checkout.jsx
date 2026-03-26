@@ -19,6 +19,8 @@ const Checkout = () => {
     paymentMethod: "COD",
   });
   const products = singleProduct ? [singleProduct] : cart;
+  console.log(products);
+  
   const fetchCart = async () => {
     try {
       const res = await axios.get("/auth/cart-Items");
@@ -34,9 +36,9 @@ const Checkout = () => {
     }
   }, [singleProduct]);
 
-  const total = products.reduce((sum, item) => sum + (item.product?.price || item.price || 0), 0);
+  const total = products.reduce((sum, item) => sum + (item.product?.price.amount/100 || item.price.amount/100 || 0), 0);
   const shipping = products.length > 0 ? 20 : 0;
-  const totalAmount = total + shipping;
+  const totalAmount = (total + shipping);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -177,7 +179,7 @@ const Checkout = () => {
                 <div>
                   <p className="font-medium">{item.product?.name || item.name}</p>
                 </div>
-                <p>${item.product?.price || item.price}</p>
+                <p>${item.product?.price.amount/100 || item.price.amount/100}</p>
               </div>
             ))
           )}

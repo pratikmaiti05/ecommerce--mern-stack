@@ -107,7 +107,7 @@ const Product = () => {
                 {items.name}
               </h1>
               <h1 className="text-xl sm:text-2xl font-bold">
-                ${items.price}
+                ${items.price.amount/100}
               </h1>
               <p className="text-gray-500 text-sm sm:text-base">
                 {items.description}
@@ -153,7 +153,7 @@ const Product = () => {
               >
                 Buy Now
               </button>
-
+              
               <button
                 disabled={!selectedSize}
                 onClick={cartHandler}

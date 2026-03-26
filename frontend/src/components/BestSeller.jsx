@@ -31,7 +31,7 @@ const BestSeller = () => {
         />
       </Link>
       <h1 className="font-thin">{product.name}</h1>
-      <span className="font-thin">{product.price}$</span>
+      <span className="font-thin">{product.price.amount/100}$</span>
     </div>
   );
 });

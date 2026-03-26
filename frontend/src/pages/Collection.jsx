@@ -137,7 +137,7 @@ const Collection = () => {
                 </Link>
                 <h1 className="text-sm sm:text-base">{product.name}</h1>
                 <span className="text-sm sm:text-base">
-                  ${product.price}
+                  ${product.price.amount/100}
                 </span>
               </div>
             ))}

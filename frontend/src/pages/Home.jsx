@@ -35,7 +35,7 @@ useEffect(() => {
         <h1 className="font-medium text-sm sm:text-base text-center line-clamp-1">
           {product.name}
         </h1>
-        <span className="font-medium text-gray-700">${product.price}</span>
+        <span className="font-medium text-gray-700">${product.price.amount/100}</span>
       </div>
     );
   });

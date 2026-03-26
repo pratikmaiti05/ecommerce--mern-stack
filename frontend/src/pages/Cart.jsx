@@ -28,7 +28,7 @@ const Cart = () => {
     fetchProducts();
   };
   const subtotal = products.reduce(
-    (total, item) => total + (item.product?.price || 0) * (item.quantity || 1),
+    (total, item) => total + (item.product?.price.amount/100 || 0) * (item.quantity || 1),
     0
   );
   const shipping = products.length > 0 ? 20 : 0;
@@ -72,7 +72,7 @@ const Cart = () => {
                 {item.product?.category}
               </p>
               <p className="text-gray-700 font-medium">
-                ${item.product?.price - (item.product?.discount || 0)}
+                ${item.product?.price.amount/100 - (item.product?.discount || 0)}
               </p>
             </div>
           </div>
