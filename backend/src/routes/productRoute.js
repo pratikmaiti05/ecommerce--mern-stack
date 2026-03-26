@@ -10,11 +10,11 @@ const upload=multer({storage:multer.memoryStorage()});
 router.post('/addProduct',upload.single('image'),isLoggedin,isAdmin,async (req,res) => {
   try {
     const image = await uploadFile(req.file);
-    let{name,price,category,subCategory,description,size}=req.body
+    let{name,price:{amount,currency},category,subCategory,description,size}=req.body
     size=JSON.parse(size)
     const products=await productModel.create({
       image:image.url,
-      name,price,category,subCategory,description,size:size
+      name,price:{amount,currency},category,subCategory,description,size:size
     })
     await publishToQueue('PRODUCT_CREATED',
       {

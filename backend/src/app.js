@@ -4,6 +4,7 @@ const cookieParser=require('cookie-parser')
 const userRoute=require('./routes/userRoute')
 const productRoute=require('./routes/productRoute')
 const orderRoute = require('./routes/orderRoute');
+// const paymentRoute=require('./routes/paymentRoute');
 const cors = require('cors');
 app.use(cors({
   origin: [process.env.FRONTEND_URL],
@@ -15,4 +16,10 @@ app.use(cookieParser())
 app.use('/auth',userRoute)
 app.use('/products',productRoute)
 app.use('/order', orderRoute);
+// app.use('/payment',paymentRoute);
+app.get('/health',(req,res)=>{
+    res.status(200).json({
+      message:"Okk"
+    })
+})
 module.exports=app
